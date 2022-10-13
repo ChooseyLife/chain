@@ -15,7 +15,8 @@ window.onload = async function() {
         // 安装Metamask插件后web3已经定义在window对象下
         web3Provider = window.web3.currentProvider;
       } else {
-        web3Provider = new Web3.providers.HttpProvider("http://localhost:7545");
+        // 7545 端口是 gannacli http://127.0.0.1:9545/ truffle-cli
+        web3Provider = new Web3.providers.HttpProvider("http://localhost:9545");
       }
       web3 = new Web3(web3Provider);
       // 获取智能合约的ABI（Application Binary Interface）文件

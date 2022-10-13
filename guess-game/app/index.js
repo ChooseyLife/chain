@@ -1,28 +1,20 @@
+// 调用 babydoge 并部署调用其方法
 window.onload = async function() {
-  var babydoge, web3Provider, account, chainId;
-  // if (window.ethereum) {
-  //   web3Provider = window.ethereum;
-  //   try {
-  //     // Request account access
-  //     await window.ethereum.enable();
-  //   } catch (error) {
-  //     // User denied account access...
-  //     console.error("User denied account access")
-  //   }
-  // }
-  // init();
-  // $.getJSON('babydoge.json', function(abi){
-  //   const provider = getWeb3Provider();
-  //   const signer = provider.getSigner();
-  //   babydoge = new ethers.Contract(
-  //     "0xc748673057861a797275CD8A068AbB95A902e8de",
-  //     abi,
-  //     signer
-  //   );
-  //   console.log(babydoge, ethereum.networkVersion);
-      
-  //   // console.log(babydoge, babydoge.name());
-  // })
+  var babydoge, account, chainId;
+  const initial = await init();
+  if (!initial) {
+    return;
+  }
+  $.getJSON('babydoge.json', function(abi){
+    const provider = getWeb3Provider();
+    const signer = provider.getSigner();
+    babydoge = new ethers.Contract(
+      "0xc748673057861a797275CD8A068AbB95A902e8de",
+      abi,
+      signer
+    );
+    console.log(babydoge, ethereum.networkVersion);
+  })
   checkWalletIsConnected()
   const callContract = async () => {
     const res = await babydoge.decimals();
@@ -151,7 +143,7 @@ async function checkWalletIsConnected() {
   } else {
     // 没有授权的账号
     console.error("No authorized account found");
-    connectWalletHandler(onSuccess);
+    connectWalletHandler();
   }
 }
 
