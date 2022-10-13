@@ -15,7 +15,6 @@ window.onload = async function() {
         // 安装Metamask插件后web3已经定义在window对象下
         web3Provider = window.web3.currentProvider;
       } else {
-        // 7545 端口是 gannacli http://127.0.0.1:9545/ truffle-cli
         web3Provider = new Web3.providers.HttpProvider("http://localhost:9545");
       }
       web3 = new Web3(web3Provider);
@@ -30,7 +29,6 @@ window.onload = async function() {
           // 通过默认的合约地址获取实例
           GuessGameContract.deployed()
           .then(function(instance){
-
               guess_contract = instance;
               guess_contract.GuessResult(function(err, result) {
                 if (!err) {
@@ -82,7 +80,8 @@ window.onload = async function() {
           document.getElementById('info').innerText = '';
           guess_contract.play.sendTransaction(player_choice, computer_choice, {
               from: web3.eth.coinbase,
-              to: '0xffbec72dd03d7b366c5c7dbc76b7f73a144fd164',
+              // 0xce39D080A6Be7c86F07f82dE4B9fb38B2EDFb932 0xffbec72dd03d7b366c5c7dbc76b7f73a144fd164
+              to: '0xce39D080A6Be7c86F07f82dE4B9fb38B2EDFb932',
               value:  web3.toWei(1, "ether")
           }).then(function(result){
               if(result) {

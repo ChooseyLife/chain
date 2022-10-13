@@ -34,9 +34,15 @@ Private Keys:
 * truffle migrate
 > 复制 `build` 文件夹下的**GuessGame.json**到`app`下
 
+### 添加本地网络到钱包中
+
+![img](https://github.com/ChooseyLife/chain/blob/main/guess-game/network.png?raw=true)
+
 ## 运行项目
 * npm i
 * npm run dev
 
 ## 注意
 > 必须要链接钱包，并将develop生成的账号导入到钱包中
+
+![img](https://github.com/ChooseyLife/chain/blob/main/guess-game/guess.png?raw=true)
