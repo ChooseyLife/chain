@@ -1,0 +1,11 @@
+.DS_Store
+guess-game/node_modules
+guess-game/app/node_modules
+# Editor directories and files
+.idea
+.vscode
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
