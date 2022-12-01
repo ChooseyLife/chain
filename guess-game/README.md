@@ -3,6 +3,8 @@
 https://trufflesuite.com/docs/truffle/getting-started/installation/
 ## 先部署合约
 > truffle develop 后将生成以下日志，包含本地测试账号与私钥，将私钥导入到钱包中，每个账号都会有100ETH
+>
+> 或者使用ganache
 ```
 Truffle Develop started at http://127.0.0.1:9545/
 Accounts:
