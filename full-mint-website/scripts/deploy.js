@@ -7,7 +7,7 @@
 const hre = require("hardhat");
 
 async function main() {
-  const RoboPunksNFT = await hre.ethers.getContractFactory("RoboPunksNFT");
+  const RoboPunksNFT = await hre.ethers.getContractFactory("RoboPunks");
   const roboPunksNFT = await RoboPunksNFT.deploy();
 
   await roboPunksNFT.deployed();

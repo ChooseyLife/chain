@@ -31,7 +31,7 @@ contract RoboPunks is ERC721, Ownable {
 
   function tokenURI(uint256 _tokenId) public view override returns (string memory) {
     require(_exists(_tokenId), 'Token does not exist');
-    return String(abi.encodePacked(baseTokenUri, String.toString(_tokenId), '.json'));
+    return string(abi.encodePacked(baseTokenUri, Strings.toString(_tokenId), '.json'));
   }
 
   function withdraw() external onlyOwner {

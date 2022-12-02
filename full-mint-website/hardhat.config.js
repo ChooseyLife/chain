@@ -1,14 +1,15 @@
 require("@nomicfoundation/hardhat-toolbox");
+require("@nomiclabs/hardhat-etherscan");
 const dotenv = require("dotenv");
 
 dotenv.config();
 
 /** @type import('hardhat/config').HardhatUserConfig */
 module.exports = {
-  solidity: "0.8.17",
+  solidity: "0.8.4",
   networks: {
-    rinkeby: {
-      url: process.env.REACT_APP_RINKEBY_RPC_URL,
+    goerli: {
+      url: process.env.REACT_APP_GOERLI_RPC_URL,
       accounts: [process.env.REACT_APP_PRIVATE_KEY]
     }
   },
