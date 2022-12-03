@@ -1,7 +1,7 @@
 import { ethers } from "ethers";
 import abi from "../assets/RoboPunksNFT.json"
 
-export const connectWalletHandler = async () => {
+export const connectWalletHandler = async (setAccounts) => {
   if (!window.ethereum) {
     message.error("please install wallet!");
     return "";
