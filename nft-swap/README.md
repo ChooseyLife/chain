@@ -18,6 +18,7 @@ This is a starter template for [Learn Next.js](https://nextjs.org/learn).
 npx create-next-app@latest nft-swap --use-npm --example "https://github.com/vercel/next-learn/tree/master/basics/learn-starter"
 npx hardhat
 npm i --save-dev "hardhat@^2.12.2" "@nomicfoundation/hardhat-toolbox@^2.0.0"
+npm install --save ethers
 ```
 
 ## hardhat
@@ -34,3 +35,14 @@ npx hardhat run scripts/deploy.js --network localhost
 ```
 npx hardhat node
 ```
+
+## MetaMask 钱包导入本地网络
+```
+// RPCURL
+http://127.0.0.1:8545/
+
+// chianId
+31337
+
+// 货币符号
+NFT
