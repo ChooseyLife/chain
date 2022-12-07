@@ -33,7 +33,15 @@ npx hardhat run scripts/deploy.js --network localhost
 
 ## 本地运行节点
 ```
+// 打开一个终端运行
 npx hardhat node
+
+// 另一个终端运行
+/*
+* npx hardhat run scripts/deploy.js 命令执行后悔输出一个合约地址
+* {合约名称} with 1 ETH and unlock timestamp 1701959054 deployed to {合约地址}
+*/
+npx hardhat clean && npx hardhat compile && npx hardhat run scripts/deploy.js --network localhost
 ```
 
 ## MetaMask 钱包导入本地网络
