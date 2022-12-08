@@ -19,6 +19,7 @@ npx create-next-app@latest nft-swap --use-npm --example "https://github.com/verc
 npx hardhat
 npm i --save-dev "hardhat@^2.12.2" "@nomicfoundation/hardhat-toolbox@^2.0.0"
 npm install --save ethers
+npm install --save @openzeppelin/contracts
 ```
 
 ## hardhat
@@ -54,3 +55,9 @@ http://127.0.0.1:8545/
 
 // 货币符号
 NFT
+
+## 项目介绍
+* 使用 openzepplin
+* 支持 enumerable 和 Token Url
+* 支持 mint
+* 支持铸币
