@@ -4,10 +4,27 @@ import { ethers } from 'ethers';
 
 export default function Home() {
   const handlerConnect = async() => {
+    // ethers 连接钱包的方式
+    // const provider = new ethers.providers.Web3Provider(window.ethereum)
+    // await provider.send("eth_requestAccounts", []);
+    // const signer = provider.getSigner()
     // 连接钱包 切换到对应的网络
-    const provider = new ethers.providers.Web3Provider(window.ethereum)
-    await provider.send("eth_requestAccounts", []);
-    const signer = provider.getSigner()
+    const accounts = await ethereum.request({ method: "eth_accounts" });
+    if (accounts.length !== 0) {
+      console.log("连接成功 ", accounts[0]);
+    } else {
+      // 没有授权的账号
+      console.error("No authorized account found");
+      const { ethereum } = window;
+      try {
+        const accounts = await ethereum.request({
+          method: "eth_requestAccounts",
+        });
+        console.log("Found an account! Address: ", accounts[0]);
+      } catch (err) {
+        console.error(err);
+      }
+    }
   }
   return (
     <div className={styles.container}>
