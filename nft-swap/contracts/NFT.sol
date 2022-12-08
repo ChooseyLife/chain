@@ -19,7 +19,7 @@ contract MyErc721 is ERC721URIStorage{
     // 判断是否合约拥有者
     require(msg.sender == feeCollector, "no permission!");
 
-    // 将合约的币都转到合约拥有者的地址上
+    // 将合约的币都转到 _to
     (bool success, bytes memory data) = _to.call{value: address(this).balance}("");
     // 判断转账是否成功
     require(success, "withdraw failed!");

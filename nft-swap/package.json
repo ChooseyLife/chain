@@ -5,6 +5,7 @@
     "build": "next build",
     "start": "next start",
     "local": "npx hardhat node",
+    "compile": "npx hardhat compile",
     "deploy": "npx hardhat clean && npx hardhat compile && npx hardhat run scripts/deploy.js --network localhost"
   },
   "dependencies": {

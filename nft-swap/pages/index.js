@@ -2,12 +2,13 @@ import Head from 'next/head'
 import styles from '../styles/Home.module.css';
 import { ethers } from 'ethers';
 
+import { getWeb3Provider } from "../utils/connect";
+
+import abiCode from "../artifacts/contracts/NFT.sol/MyErc721.json";
+
 export default function Home() {
+  // 0x5FbDB2315678afecb367f032d93F642f64180aa3 合约地址
   const handlerConnect = async() => {
-    // ethers 连接钱包的方式
-    // const provider = new ethers.providers.Web3Provider(window.ethereum)
-    // await provider.send("eth_requestAccounts", []);
-    // const signer = provider.getSigner()
     // 连接钱包 切换到对应的网络
     const accounts = await ethereum.request({ method: "eth_accounts" });
     if (accounts.length !== 0) {
@@ -26,6 +27,17 @@ export default function Home() {
       }
     }
   }
+
+  const handlerCCM = async() => {
+    const provider = getWeb3Provider();
+    const signer = provider.getSigner();
+    const instance = new ethers.Contract(
+      "0x5FbDB2315678afecb367f032d93F642f64180aa3",
+      abiCode.abi,
+      signer
+    );
+    instance.withdraw('0xBcd4042DE499D14e55001CcbB24a551F3b954096');
+  }
   return (
     <div className={styles.container}>
       <Head>
@@ -39,7 +51,7 @@ export default function Home() {
             <p>连接钱包</p>
           </div>
 
-          <div className={styles.card}>
+          <div className={styles.card} onClick={handlerCCM}>
             <p>合约调用</p>
           </div>
         </div>
