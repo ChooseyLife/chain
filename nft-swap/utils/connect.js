@@ -1,6 +1,6 @@
 import { ethers } from 'ethers';
 
-export  function getWeb3Provider() {
+export function getWeb3Provider() {
   if (!window.web3Provider) {
       if (!window.ethereum) {
           console.error("there is no web3 provider.");

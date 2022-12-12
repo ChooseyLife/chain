@@ -6,6 +6,7 @@
 .pnp.js
 artifacts
 cache
+package-lock.json
 
 # testing
 /coverage
