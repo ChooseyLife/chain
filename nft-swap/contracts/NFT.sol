@@ -10,7 +10,7 @@ contract MyErc721 is ERC721URIStorage{
   Counters.Counter private _tokenIds;
   address feeCollector;
   uint fee = 1 gwei;
-  event WITHDRAW(uint value, bytes data);
+  event WITHDRAW(uint indexed value, bytes indexed data);
   constructor(address fc) ERC721("GameItem", "ITM") {
     feeCollector = fc;
   }
