@@ -4,10 +4,8 @@ import { ethers } from 'ethers';
 import { Web3Storage } from "web3.storage";
 import React, { useState, useReducer } from 'react'
 
-// import * as dotenv from 'dotenv'
-// dotenv.config()
 import { getWeb3Provider } from "../utils/connect";
-import { getIpfsStore, getIpfsFiles, token } from "../utils/ipfs";
+import { getIpfsStore, makeGatewayURL, token } from "../utils/ipfs";
 
 import abiCode from "../artifacts/contracts/NFT.sol/MyErc721.json";
 
@@ -39,13 +37,19 @@ export default function Home() {
 
   const handlerCCM = async() => {
     const provider = getWeb3Provider();
+    const account = (await provider.send('eth_requestAccounts', []))[0];
     const signer = provider.getSigner();
     const instance = new ethers.Contract(
       "0x5FbDB2315678afecb367f032d93F642f64180aa3",
       abiCode.abi,
       signer
     );
-    instance.withdraw('0x8626f6940E2eb28930eFb4CeF49B2d1F2C9C1199');
+    console.log(account, signer.address);
+    const transaction = await instance.mint(account,'/ipfs/bafybeihltlxs3vf74ewwxpskochuv4ck47kik4d5r3twghnyet4lkdfr5m/', {value: 1000000000});
+    const txReceipt = await transaction.wait();
+    const [transferEvent] = txReceipt.events;
+    const {from, to, tokenId} = transferEvent.args;
+    alert("Decoded data:" + " from: "+ from.toString() + " to: " +to.toString() + " tokenId: " + tokenId.toString());
   }
 
   const handlerIpfs = async(event) => {
@@ -72,15 +76,23 @@ export default function Home() {
     showMessage(`> ⁂ ${totalBytes.toLocaleString()} bytes stored!`)
   }
   const handlerGetIFPS = async() => {
-    // const res = await web3Storage.get('bafybeihltlxs3vf74ewwxpskochuv4ck47kik4d5r3twghnyet4lkdfr5m'); // Web3Response
+    const res = await web3Storage.get('bafybeihltlxs3vf74ewwxpskochuv4ck47kik4d5r3twghnyet4lkdfr5m'); // Web3Response
+    const status = await web3Storage.status("bafybeihltlxs3vf74ewwxpskochuv4ck47kik4d5r3twghnyet4lkdfr5m");
+    const files = await res.files(); // Web3File[]
+    console.log(res, '---status:', status);
+    for (const file of files) {
+      console.log(`${file.cid} ${file.name} ${file.size}`);
+    }
     // const files = await res.files(); // Web3File[]
     // for (const file of files) {
     //   console.log(`${file.cid} ${file.name} ${file.size}`);
     // }
     const client = getIpfsStore();
-    const img = await getIpfsFiles('200621105327-1-lp.jpeg');
+    const img = await makeGatewayURL('200621105327-1-lp.jpeg');
     setImgUrl(img)
-    console.log(img, client.list());
+    for await (const upload of client.list()) {
+      console.log(upload);
+    }
   }
   return (
     <div className={styles.container}>

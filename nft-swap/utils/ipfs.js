@@ -40,8 +40,16 @@ export async function storeWithProgress (files) {
   return client.put(files, { onRootCidReady, onStoredChunk })
 }
 
-export const getIpfsFiles = async (fileName, cid = 'bafybeihltlxs3vf74ewwxpskochuv4ck47kik4d5r3twghnyet4lkdfr5m') => {
-  // https://bafybeihltlxs3vf74ewwxpskochuv4ck47kik4d5r3twghnyet4lkdfr5m.ipfs.dweb.link/
-  // https://bafybeihltlxs3vf74ewwxpskochuv4ck47kik4d5r3twghnyet4lkdfr5m.ipfs.w3s.link/200621105327-1-lp.jpeg
-  return `https://${cid}.ipfs.w3s.link/${fileName}`
+export function makeGatewayURL(path, cid = 'bafybeihltlxs3vf74ewwxpskochuv4ck47kik4d5r3twghnyet4lkdfr5m') {
+  return `https://${cid}.ipfs.dweb.link/${encodeURIComponent(path)}`
+}
+
+export function jsonFile(filename, obj) {
+  /**
+  * jsonFile('metadata.json', {
+  *    path: imageFile.name,
+  *    caption
+  * }
+  */
+  return new File([JSON.stringify(obj)], filename)
 }
