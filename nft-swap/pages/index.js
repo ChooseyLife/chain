@@ -4,7 +4,7 @@ import { ethers } from 'ethers';
 import { Web3Storage } from "web3.storage";
 import React, { useState, useReducer } from 'react'
 
-import { getWeb3Provider } from "../utils/connect";
+import { getWeb3Provider, networkConnect } from "../utils/connect";
 import { getIpfsStore, makeGatewayURL, token } from "../utils/ipfs";
 
 import abiCode from "../artifacts/contracts/NFT.sol/MyErc721.json";
@@ -76,19 +76,21 @@ export default function Home() {
     showMessage(`> ⁂ ${totalBytes.toLocaleString()} bytes stored!`)
   }
   const handlerGetIFPS = async() => {
-    const res = await web3Storage.get('bafybeihltlxs3vf74ewwxpskochuv4ck47kik4d5r3twghnyet4lkdfr5m'); // Web3Response
-    const status = await web3Storage.status("bafybeihltlxs3vf74ewwxpskochuv4ck47kik4d5r3twghnyet4lkdfr5m");
-    const files = await res.files(); // Web3File[]
-    console.log(res, '---status:', status);
-    for (const file of files) {
-      console.log(`${file.cid} ${file.name} ${file.size}`);
-    }
-    const client = getIpfsStore();
-    const img = await makeGatewayURL('200621105327-1-lp.jpeg');
-    setImgUrl(img)
-    for await (const upload of client.list()) {
-      console.log(upload);
-    }
+    const isConnect = await networkConnect();
+    console.log(isConnect);
+    // const res = await web3Storage.get('bafybeihltlxs3vf74ewwxpskochuv4ck47kik4d5r3twghnyet4lkdfr5m'); // Web3Response
+    // const status = await web3Storage.status("bafybeihltlxs3vf74ewwxpskochuv4ck47kik4d5r3twghnyet4lkdfr5m");
+    // const files = await res.files(); // Web3File[]
+    // console.log(res, '---status:', status);
+    // for (const file of files) {
+    //   console.log(`${file.cid} ${file.name} ${file.size}`);
+    // }
+    // const client = getIpfsStore();
+    // const img = await makeGatewayURL('200621105327-1-lp.jpeg');
+    // setImgUrl(img)
+    // for await (const upload of client.list()) {
+    //   console.log(upload);
+    // }
   }
   return (
     <div className="md:container md:mx-auto">
