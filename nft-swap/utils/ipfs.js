@@ -9,9 +9,9 @@ export const getIpfsStore = () => {
   return new Web3Storage({ token }) 
 }
 
-async function storeFiles (files) {
+export async function storeFiles (files, options) {
   const client = getIpfsStore()
-  const cid = await client.put(files)
+  const cid = await client.put(files, options)
   console.log('stored files with cid:', cid)
   return cid
 }
@@ -41,6 +41,8 @@ export async function storeWithProgress (files) {
 }
 
 export function makeGatewayURL(path, cid = 'bafybeihltlxs3vf74ewwxpskochuv4ck47kik4d5r3twghnyet4lkdfr5m') {
+  // https://bafkreieqhtalyigtunonqo7iennx3j3gvwis5lw26vqlumgpcoiwmqikga.ipfs.w3s.link/
+  // https://bafkreicn736jfgqyxwhb623xolqzfozv6cikzdpbuttbuad7calps6uvga.ipfs.w3s.link/
   return `https://${cid}.ipfs.dweb.link/${encodeURIComponent(path)}`
 }
 
