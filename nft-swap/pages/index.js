@@ -86,9 +86,8 @@ export default function Home() {
     const nft = new ethers.Contract(networkConfig.nftAddress, abiCode.abi, signer)
     const transaction = await nft.connect(signer).mint(account, 'https://bafkreicn736jfgqyxwhb623xolqzfozv6cikzdpbuttbuad7calps6uvga.ipfs.dweb.link/', {value: 1000000000})
     const tx = await transaction.wait()
-    debugger;
-    const evt = tx.event[0]
-    const value = tx.event[1]
+    const evt = tx.events[0]
+    const value = evt.args[2]
     const tokenId = value.toNumber();
     return { success: true, tokenId }
   }
