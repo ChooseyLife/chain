@@ -19,10 +19,6 @@ export async function networkConnect() {
     return false;
   }
   try {
-    // 获取当前连接的账户地址:
-    const account = await window.ethereum.request({
-        method: 'eth_requestAccounts',
-    });
     if (String(config.chainId) !== ethereum.networkVersion ) {
       try {
         const r = await ethereum.request({
@@ -45,10 +41,18 @@ export async function networkConnect() {
         // handle other "switch" errors
       }
     }
-    console.log('wallet connected.', config.chainId, account);
+    console.log('wallet connected.', config.chainId);
     return true;
   } catch (e) {
     console.error('could not get a wallet connection.', e);
     return false;
   }
+}
+
+export async function getWalletAccount() {
+    // 获取当前连接的账户地址:
+    const account = await window.ethereum.request({
+      method: 'eth_requestAccounts',
+  });
+  return account;
 }

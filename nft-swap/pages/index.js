@@ -1,13 +1,13 @@
 import Head from 'next/head'
 import styles from '../styles/Home.module.css';
 import { ethers } from 'ethers';
-import { Web3Storage } from "web3.storage";
 import React, { useState, useReducer } from 'react'
 
-import { getWeb3Provider, networkConnect } from "../utils/connect";
-import { getIpfsStore, makeGatewayURL, storeFiles, jsonFile } from "../utils/ipfs";
+import { getWeb3Provider, networkConnect, getWalletAccount } from "../utils/connect";
+import { getIpfsStore, storeFiles, jsonFile } from "../utils/ipfs";
 
 import abiCode from "../artifacts/contracts/NFT.sol/MyErc721.json";
+import networkConfig from "../config";
 
 export default function Home() {
   const [messages, showMessage] = useReducer((msgs, m) => msgs.concat(m), [])
@@ -72,6 +72,27 @@ export default function Home() {
     setImgUrl(`https://${cid}.ipfs.dweb.link/`)
   }
 
+  const mintNFT = async() => {
+    const isConnect = networkConnect();
+    if (!isConnect) {
+      console.log('network not right!');
+      return { success: false }
+    }
+
+    const provider = getWeb3Provider();
+    const signer = provider.getSigner();
+    const account = await signer.getAddress();
+    console.log(account, await signer.getAddress());
+    const nft = new ethers.Contract(networkConfig.nftAddress, abiCode.abi, signer)
+    const transaction = await nft.connect(signer).mint(account, 'https://bafkreicn736jfgqyxwhb623xolqzfozv6cikzdpbuttbuad7calps6uvga.ipfs.dweb.link/', {value: 1000000000})
+    const tx = await transaction.wait()
+    debugger;
+    const evt = tx.event[0]
+    const value = tx.event[1]
+    const tokenId = value.toNumber();
+    return { success: true, tokenId }
+  }
+
   const mint = async () => {}
   return (
     <div className="md:container md:mx-auto">
@@ -89,8 +110,8 @@ export default function Home() {
             <p>合约调用</p>
           </div>
 
-          <div className={styles.card}>
-            <p>获取IFPS</p>
+          <div className={styles.card} onClick={mintNFT}>
+            <p>mint</p>
           </div>
           <div className={styles.card}>
             <a href='home'>跳转</a>
