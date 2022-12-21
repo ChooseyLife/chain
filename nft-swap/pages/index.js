@@ -92,7 +92,21 @@ export default function Home() {
     return { success: true, tokenId }
   }
 
-  const mint = async () => {}
+  const getOwnBalanceOf = async () => {
+    const provider = getWeb3Provider();
+    const signer = provider.getSigner();
+    const account = await signer.getAddress();
+    const nft = new ethers.Contract(networkConfig.nftAddress, abiCode.abi, signer)
+    const balanceWETH = (await nft.balanceOf(account)).toNumber();
+    const _ownerTokenIds = [];
+    for (let i = 0; i < balanceWETH; i++) {
+      const _own = await nft.ownerOf(i);
+      if (_own === account) {
+        _ownerTokenIds.push(i)
+      }
+    }
+    console.log(`nft 数量: ${ethers.utils.formatEther(balanceWETH)}\n`, _ownerTokenIds)
+  }
   return (
     <div className="md:container md:mx-auto">
       <Head>
@@ -112,8 +126,8 @@ export default function Home() {
           <div className={styles.card} onClick={mintNFT}>
             <p>mint</p>
           </div>
-          <div className={styles.card}>
-            <a href='home'>跳转</a>
+          <div className={styles.card} onClick={getOwnBalanceOf}>
+            <a href='#'>获取余额</a>
           </div>
           <form id='upload-form' onSubmit={handlerIpfs}>
             <label htmlFor='filepicker'>Pick files to store</label>
