@@ -5,6 +5,7 @@ import React, { useState, useReducer } from 'react'
 
 import { getWeb3Provider, networkConnect, getWalletAccount } from "../utils/connect";
 import { getIpfsStore, storeFiles, jsonFile } from "../utils/ipfs";
+import { ownerOfNft } from "../utils/nft";
 
 import abiCode from "../artifacts/contracts/NFT.sol/MyErc721.json";
 import networkConfig from "../config";
@@ -93,19 +94,9 @@ export default function Home() {
   }
 
   const getOwnBalanceOf = async () => {
-    const provider = getWeb3Provider();
-    const signer = provider.getSigner();
-    const account = await signer.getAddress();
-    const nft = new ethers.Contract(networkConfig.nftAddress, abiCode.abi, signer)
-    const balanceWETH = (await nft.balanceOf(account)).toNumber();
-    const _ownerTokenIds = [];
-    for (let i = 0; i < balanceWETH; i++) {
-      const _own = await nft.ownerOf(i);
-      if (_own === account) {
-        _ownerTokenIds.push(i)
-      }
-    }
-    console.log(`nft 数量: ${ethers.utils.formatEther(balanceWETH)}\n`, _ownerTokenIds)
+    const nft = await ownerOfNft();
+    console.log(nft);
+    // console.log(`nft 数量: ${ethers.utils.formatEther(balanceWETH)}\n`, _ownerTokenIds, tokenUrl)
   }
   return (
     <div className="md:container md:mx-auto">
