@@ -34,7 +34,7 @@ export default function Layout({children}) {
 
               <a href="/sell" className="font-semibold text-gray-900 hover:text-gray-900">Sell Digital Asset</a>
 
-              <a href="/my" className="font-semibold text-gray-900 hover:text-gray-900">My Digital Asset</a>
+              <a href="/mynft" className="font-semibold text-gray-900 hover:text-gray-900">My Digital Asset</a>
 
               <a href="/creator" className="font-semibold text-gray-900 hover:text-gray-900">Creator Dashboard</a>
             </div>
@@ -67,7 +67,7 @@ export default function Layout({children}) {
 
                     <a href="/sell" className="-mx-3 block rounded-lg py-2 px-3 text-base font-semibold leading-7 text-gray-900 hover:bg-gray-400/10">Sell Digital Asset</a>
 
-                    <a href="/my" className="-mx-3 block rounded-lg py-2 px-3 text-base font-semibold leading-7 text-gray-900 hover:bg-gray-400/10">My Digital Asset</a>
+                    <a href="/mynft" className="-mx-3 block rounded-lg py-2 px-3 text-base font-semibold leading-7 text-gray-900 hover:bg-gray-400/10">My Digital Asset</a>
 
                     <a href="/creator" className="-mx-3 block rounded-lg py-2 px-3 text-base font-semibold leading-7 text-gray-900 hover:bg-gray-400/10">Creator Dashboard</a>
                   </div>
