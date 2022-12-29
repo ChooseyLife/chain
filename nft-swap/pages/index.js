@@ -69,7 +69,7 @@ export default function Home() {
       name: file.name,
       wrapWithDirectory: false
     })
-    // https://${cid}.ipfs.dweb.link/
+    // https://${cid}.ipfs.dweb.link/ https://${cid}.ipfs.w3s.link/
     setImgUrl(`https://${cid}.ipfs.dweb.link/`)
   }
 
@@ -85,7 +85,7 @@ export default function Home() {
     const account = await signer.getAddress();
     console.log(account, await signer.getAddress());
     const nft = new ethers.Contract(networkConfig.nftAddress, abiCode.abi, signer)
-    const transaction = await nft.connect(signer).mint(account, 'https://bafkreicn736jfgqyxwhb623xolqzfozv6cikzdpbuttbuad7calps6uvga.ipfs.dweb.link/', {value: 1000000000})
+    const transaction = await nft.connect(signer).mint(account, 'https://bafkreicg47w66ydea7cdmqq5kex2pzsk2wq26nnl3mmglfvf56e2ottwpe.ipfs.w3s.link/', {value: 1000000000})
     const tx = await transaction.wait()
     const evt = tx.events[0]
     const value = evt.args[2]
@@ -121,9 +121,15 @@ export default function Home() {
             <a href='#'>获取余额</a>
           </div>
           <form id='upload-form' onSubmit={handlerIpfs}>
+            <div>
+              <label>nft name</label>
+              <input name='name' placeholder='请输入名称'/>
+              <label>describe</label>
+              <input name='describe' placeholder='请输入描述'/>
+            </div>
             <label htmlFor='filepicker'>Pick files to store</label>
             <input type='file' id='filepicker' name='fileList' onChange={e => onChangeImg(e.target.files)} multiple required />
-            <input type='submit' value='Submit' id='submit' />
+            <button type='submit'>submit</button>
           </form>
           <div id='output'>
             &gt; ⁂ waiting for form submission...
