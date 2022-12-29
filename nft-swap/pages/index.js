@@ -5,7 +5,7 @@ import React, { useState, useReducer } from 'react'
 
 import { getWeb3Provider, networkConnect, getWalletAccount } from "../utils/connect";
 import { getIpfsStore, storeFiles, jsonFile } from "../utils/ipfs";
-import { ownerOfNft } from "../utils/nft";
+import { ownerOfNft, mint } from "../utils/nft";
 
 import abiCode from "../artifacts/contracts/NFT.sol/MyErc721.json";
 import networkConfig from "../config";
@@ -38,8 +38,12 @@ export default function Home() {
 
     showMessage('> 📦 creating web3.storage client')
     const client = getIpfsStore()
+    const imgCid = await storeFiles([file], {
+      name: file.name,
+      wrapWithDirectory: false
+    })
     showMessage('> 🤖 chunking and hashing the files (in your browser!) to calculate the Content ID')
-    const data = { meta: file.name, desc: 'cute girl', imageUri: imgUrl, path: file.name}
+    const data = { meta: file.name, desc: 'cute girl', imgCid: imgCid, dwebUrl: `https://${imgCid}.ipfs.dweb.link/`, w3linkUrl: `https://${imgCid}.ipfs.w3s.link/`}
     const fileData = jsonFile('metadata.json', data)
     const cid = await client.put([fileData], {
       wrapWithDirectory: false,
@@ -58,39 +62,12 @@ export default function Home() {
       totalBytes += upload.dagSize || 0
     }
     showMessage(`> ⁂ ${totalBytes.toLocaleString()} bytes stored!`)
+    mint(cid)
   }
   const onChangeImg = async(files) => {
     // 先上传图片
     const [file] = files;
     setFile(file)
-    console.log(files, file, jsonFile('metadata.json', file));
-
-    const cid = await storeFiles(files, {
-      name: file.name,
-      wrapWithDirectory: false
-    })
-    // https://${cid}.ipfs.dweb.link/ https://${cid}.ipfs.w3s.link/
-    setImgUrl(`https://${cid}.ipfs.dweb.link/`)
-  }
-
-  const mintNFT = async() => {
-    const isConnect = networkConnect();
-    if (!isConnect) {
-      console.log('network not right!');
-      return { success: false }
-    }
-
-    const provider = getWeb3Provider();
-    const signer = provider.getSigner();
-    const account = await signer.getAddress();
-    console.log(account, await signer.getAddress());
-    const nft = new ethers.Contract(networkConfig.nftAddress, abiCode.abi, signer)
-    const transaction = await nft.connect(signer).mint(account, 'https://bafkreicg47w66ydea7cdmqq5kex2pzsk2wq26nnl3mmglfvf56e2ottwpe.ipfs.w3s.link/', {value: 1000000000})
-    const tx = await transaction.wait()
-    const evt = tx.events[0]
-    const value = evt.args[2]
-    const tokenId = value.toNumber();
-    return { success: true, tokenId }
   }
 
   const getOwnBalanceOf = async () => {
@@ -113,20 +90,15 @@ export default function Home() {
           <div className={styles.card} onClick={handlerCCM}>
             <p>合约调用</p>
           </div>
-
-          <div className={styles.card} onClick={mintNFT}>
-            <p>mint</p>
-          </div>
           <div className={styles.card} onClick={getOwnBalanceOf}>
             <a href='#'>获取余额</a>
           </div>
           <form id='upload-form' onSubmit={handlerIpfs}>
-            <div>
-              <label>nft name</label>
-              <input name='name' placeholder='请输入名称'/>
-              <label>describe</label>
-              <input name='describe' placeholder='请输入描述'/>
-            </div>
+            <label>gateway</label>
+            <select placeholder='select gateway' name="gateway">
+              <option value="w3link">w3link</option>
+              <option value="dweb">dweb</option>
+            </select>
             <label htmlFor='filepicker'>Pick files to store</label>
             <input type='file' id='filepicker' name='fileList' onChange={e => onChangeImg(e.target.files)} multiple required />
             <button type='submit'>submit</button>
@@ -136,7 +108,6 @@ export default function Home() {
             {messages.map((m, i) => <div key={m + i}>{m}</div>)}
           </div>
           <img src={imgUrl} />
-          {/* <a href={imgUrl}>{imgUrl}</a> */}
         </div>
       </main>
     </div>

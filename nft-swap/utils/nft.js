@@ -4,7 +4,8 @@ import { getWeb3Provider, networkConnect } from "./connect";
 import abiCode from "../artifacts/contracts/NFT.sol/MyErc721.json";
 
 import networkConfig from "../config";
-export  const mintNFT = async() => {
+
+export  const mint = async(cid) => {
   const isConnect = networkConnect();
   if (!isConnect) {
     console.log('network not right!');
@@ -16,12 +17,21 @@ export  const mintNFT = async() => {
   const account = await signer.getAddress();
   console.log(account, await signer.getAddress());
   const nft = new ethers.Contract(networkConfig.nftAddress, abiCode.abi, signer)
-  const transaction = await nft.connect(signer).mint(account, 'https://bafkreicn736jfgqyxwhb623xolqzfozv6cikzdpbuttbuad7calps6uvga.ipfs.dweb.link/', {value: 1000000000})
+  const transaction = await nft.connect(signer).mint(account, cid, {value: 1000000000})
   const tx = await transaction.wait()
   const evt = tx.events[0]
   const value = evt.args[2]
   const tokenId = value.toNumber();
+  console.log('success', tokenId)
   return { success: true, tokenId }
+}
+
+export const getGateWay = (key, cid) => {
+  const obj = {
+    w3link: `https://${cid}.ipfs.dweb.link/`,
+    dweb: `https://${cid}.ipfs.dweb.link/`
+  }
+  return obj[key]
 }
 
 export const ownerOfNft = async () => {
