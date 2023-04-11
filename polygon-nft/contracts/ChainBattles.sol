@@ -12,7 +12,14 @@ contract ChainBattles is ERC721URIStorage {
     using Counters for Counters.Counter;
     Counters.Counter private _tokenIds;
 
-    mapping(uint256 => uint256) public tokenIdToLevels;
+    struct tokenProps {
+      uint256 levels;
+      uint256 speed;
+      uint256 power;
+      uint256 age;
+    }
+
+    mapping(uint256 => tokenProps) public tokenIdToLevels;
 
     constructor() ERC721("Chain Battles", "CBTLS") {}
 
@@ -20,12 +27,18 @@ contract ChainBattles is ERC721URIStorage {
         _tokenIds.increment();
         uint256 newItemId = _tokenIds.current();
         _safeMint(msg.sender, newItemId);
-        tokenIdToLevels[newItemId] = 0;
+        tokenProps memory newItems = tokenProps({
+            levels: 0,
+            speed: 0,
+            power: block.timestamp,
+            age: 100
+        });
+        tokenIdToLevels[newItemId] = newItems;
         _setTokenURI(newItemId, getTokenURI(newItemId));
     }
 
     function getLevels(uint256 tokenId) public view returns (string memory) {
-        uint256 levels = tokenIdToLevels[tokenId];
+        uint256 levels = tokenIdToLevels[tokenId].levels;
         return levels.toString();
     }
 
@@ -81,8 +94,8 @@ contract ChainBattles is ERC721URIStorage {
             ownerOf(tokenId) == msg.sender,
             "You must own this token to train it"
         );
-        uint256 currentLevel = tokenIdToLevels[tokenId];
-        tokenIdToLevels[tokenId] = currentLevel + 1;
+        uint256 currentLevel = tokenIdToLevels[tokenId].levels;
+        tokenIdToLevels[tokenId].levels = currentLevel + 1;
         _setTokenURI(tokenId, getTokenURI(tokenId));
     }
 }
